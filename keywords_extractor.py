@@ -30,12 +30,20 @@ data_df = pd.DataFrame(list(df['data']))
 # create Series of dicts of citation tags
 tag_series = data_df['tags'].explode().dropna()
 
-# create unique list of citation tags
-keywords_lst = list(set([d['tag'] for d in tag_series.values]))
+# create list of all citation tags, including duplicates
+keywords_lst = [d['tag'] for d in tag_series.values]
 
 # write keyword list to text file
 with open('data/keywords.txt', 'w') as file:
 	for word in keywords_lst:
+		file.write(word + '\n')
+
+# create unique list of citation tags
+unique_keywords_lst = list(set(keywords_lst))
+
+# write unique keyword list to text file
+with open('data/unique_keywords.txt', 'w') as file:
+	for word in unique_keywords_lst:
 		file.write(word + '\n')
 
 
@@ -46,4 +54,5 @@ if __name__ == '__main__':
 	print('Keywords...')
 	print(keywords_lst)
 	print(f'{data_df.shape[0]} citations used')
-	print(f'{len(keywords_lst)} unique tags found')
+	print(f'{len(keywords_lst)} tags found')
+	print(f'{len(unique_keywords_lst)} unique tags found')
